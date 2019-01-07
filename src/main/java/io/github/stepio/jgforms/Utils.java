@@ -8,6 +8,9 @@ import static java.lang.String.format;
 
 public class Utils {
 
+    private Utils() {
+    }
+
     public static String encode(String text) {
         try {
             if (isEmpty(text)) {
@@ -48,7 +51,7 @@ public class Utils {
         state(value != null, comment, params);
     }
 
-    static void state(boolean flag, String comment, Object... params) {
+    public static void state(boolean flag, String comment, Object... params) {
         if (!flag) {
             throw new IllegalArgumentException(message(comment, params));
         }

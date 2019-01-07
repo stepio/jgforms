@@ -12,8 +12,14 @@ import static java.lang.String.format;
 
 public class AnswerBuilder {
 
-    static final String GOOGLE_FORM_TEMPLATE = "https://docs.google.com/forms/d/e/%s/formResponse";
-    static final String QUESTION_PARAM_FORMAT = "entry.%d";
+    private static final String GOOGLE_FORM_TEMPLATE = "https://docs.google.com/forms/d/e/%s/formResponse";
+    private static final String QUESTION_PARAM_FORMAT = "entry.%d";
+
+    private static final String QUESTION_ID_NOT_NULL = "QuestionId cannot be null";
+    private static final String QUESTION_KEY_NOT_NULL = "QuestionKey cannot be null";
+    private static final String ANSWER_FOR_ID_NOT_NULL = "Answer for %d cannot be null";
+    private static final String ANSWER_FOR_KEY_NOT_NULL = "Answer for %s cannot be null";
+    private static final String ANSWER_REQUIRED = "At least one answer is mandatory to submit a form";
 
     private String key;
     private Map<String, String> answers;
@@ -24,26 +30,26 @@ public class AnswerBuilder {
     }
 
     public AnswerBuilder put(Long questionId, Object value) {
-        notNull(questionId, "QuestionId cannot be null");
-        notNull(value, "Answer for %d cannot be null", questionId);
+        notNull(questionId, QUESTION_ID_NOT_NULL);
+        notNull(value, ANSWER_FOR_ID_NOT_NULL, questionId);
         return put(questionId, String.valueOf(value));
     }
 
     public AnswerBuilder put(Long questionId, String value) {
-        notNull(questionId, "QuestionId cannot be null");
-        notNull(value, "Answer for %d cannot be null", questionId);
+        notNull(questionId, QUESTION_ID_NOT_NULL);
+        notNull(value, ANSWER_FOR_ID_NOT_NULL, questionId);
         return put(toQuestionParam(questionId), String.valueOf(value));
     }
 
     public AnswerBuilder put(String questionKey, String value) {
-        notNull(questionKey, "QuestionKey cannot be null");
-        notNull(value, "Answer for %s cannot be null", questionKey);
+        notNull(questionKey, QUESTION_KEY_NOT_NULL);
+        notNull(value, ANSWER_FOR_KEY_NOT_NULL, questionKey);
         this.answers.put(questionKey, value);
         return this;
     }
 
     public String toUrlString() {
-        isNotEmpty(this.answers, "At least one answer is mandatory to submit a form");
+        isNotEmpty(this.answers, ANSWER_REQUIRED);
         StringBuilder template = new StringBuilder();
         template.append(format(GOOGLE_FORM_TEMPLATE, AnswerBuilder.this.key))
                 .append('?');
@@ -65,8 +71,7 @@ public class AnswerBuilder {
         return new URL(toUrlString());
     }
 
-    static String toQuestionParam(Long questionId) {
-        notNull(questionId, "QuestionId cannot be null");
+    private static String toQuestionParam(Long questionId) {
         return format(QUESTION_PARAM_FORMAT, questionId);
     }
 
