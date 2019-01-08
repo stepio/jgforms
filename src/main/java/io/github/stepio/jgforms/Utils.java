@@ -6,6 +6,12 @@ import java.util.Map;
 
 import static java.lang.String.format;
 
+/**
+ * Utility methods for using within this library.
+ * Do not use apache commons or other utilities as such extra dependencies may be unwanted for Android.
+ *
+ * @author Igor Stepanov
+ */
 public class Utils {
 
     private Utils() {

@@ -6,6 +6,11 @@ import java.net.URL;
 
 import static io.github.stepio.jgforms.Utils.isSuccess;
 
+/**
+ * Submits Google Form data using Java native {@code HttpURLConnection}.
+ *
+ * @author Igor Stepanov
+ */
 public class Submitter {
 
     private static final Log LOG = Log.getLogger(Submitter.class);

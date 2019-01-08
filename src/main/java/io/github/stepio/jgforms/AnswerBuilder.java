@@ -10,6 +10,11 @@ import static io.github.stepio.jgforms.Utils.isNotEmpty;
 import static io.github.stepio.jgforms.Utils.notNull;
 import static java.lang.String.format;
 
+/**
+ * Builds request URL for a Google Form.
+ *
+ * @author Igor Stepanov
+ */
 public class AnswerBuilder {
 
     private static final String GOOGLE_FORM_TEMPLATE = "https://docs.google.com/forms/d/e/%s/formResponse";

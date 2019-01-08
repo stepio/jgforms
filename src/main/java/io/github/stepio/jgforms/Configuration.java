@@ -2,6 +2,11 @@ package io.github.stepio.jgforms;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Holder for project-specific configurations, allows overriding default values.
+ *
+ * @author Igor Stepanov
+ */
 public class Configuration {
 
     private long connectTimeout;

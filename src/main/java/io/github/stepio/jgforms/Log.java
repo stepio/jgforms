@@ -3,6 +3,12 @@ package io.github.stepio.jgforms;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Wrapper for Java-native logger.
+ * Can be easily removed with ProGuard if necessary.
+ *
+ * @author Igor Stepanov
+ */
 public class Log {
 
     private Logger logger;
