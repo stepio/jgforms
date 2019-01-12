@@ -1,4 +1,4 @@
-package io.github.stepio.jgforms;
+package io.github.stepio.jgforms.exception;
 
 /**
  * Indicates that for some reason form was not (or might not be) submitted.

@@ -1,38 +1,70 @@
 package io.github.stepio.jgforms;
 
+import io.github.stepio.jgforms.answer.Builder;
+import io.github.stepio.jgforms.exception.InvalidFormException;
+import io.github.stepio.jgforms.exception.MissingRequiredAnswerException;
+import io.github.stepio.jgforms.exception.NotSubmittedException;
+import io.github.stepio.jgforms.test.JGForm;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 
+import static io.github.stepio.jgforms.Submitter.isSuccess;
 import static java.lang.System.getProperty;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SubmitterTest {
 
+    private Submitter invalid;
     private Submitter submitter;
 
     @Before
     public void setUp() {
         Configuration configuration = new Configuration();
-        this.submitter = new Submitter(configuration);
+        configuration.setConnectTimeout(-1);
+        configuration.setReadTimeout(-1);
+        this.invalid = new Submitter(configuration);
+        this.submitter = new Submitter(
+                new Configuration()
+        );
     }
 
     @Test
     public void submitFormExpectSuccess() throws MalformedURLException {
-        URL url = AnswerBuilder.formKey("1FAIpQLScahJirT2sVrm0qDveeuiO1oZBJ5B7J0gdeI7UAZGohKEmi9g")
-                .put(1464627081L, getProperty("user.name", "unknown"))
-                .put(786688631L, getProperty("user.dir", "unknown"))
+        Calendar date = Calendar.getInstance();
+        Calendar from = Calendar.getInstance();
+        from.set(date.get(Calendar.YEAR) - 1, date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH), 1, 2, 3);
+        URL url = Builder.formKey("1FAIpQLScahJirT2sVrm0qDveeuiO1oZBJ5B7J0gdeI7UAZGohKEmi9g")
+                .put(JGForm.USER_NAME, getProperty("user.name", "unknown"))
+                .put(JGForm.DIRECTORY, getProperty("user.dir", "unknown"))
+                .putDateTime(JGForm.CREATION_DATE, date)
+                .putDuration(JGForm.SAMPLE_DURATION, from, date)
                 .toUrl();
         this.submitter.submitForm(url);
     }
 
     @Test
-    public void submitFormExpectNoForm() throws MalformedURLException {
-        final URL url = AnswerBuilder.formKey("dummy123456789qwerty")
-                .put(123L, "dummy")
+    public void submitFormExpectNotSubmittedException() throws MalformedURLException {
+        final URL url = Builder.formKey("dummy123456789qwerty")
+                .put(JGForm.USER_NAME, "dummy")
+                .toUrl();
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                SubmitterTest.this.invalid.submitForm(url);
+            }
+        }).isInstanceOf(NotSubmittedException.class).hasMessage("Failed to submit form, unexpected exception");
+    }
+
+    @Test
+    public void submitFormExpectInvalidFormException() throws MalformedURLException {
+        final URL url = Builder.formKey("dummy123456789qwerty")
+                .put(JGForm.USER_NAME, "dummy")
                 .toUrl();
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
@@ -43,15 +75,26 @@ public class SubmitterTest {
     }
 
     @Test
-    public void submitFormExpectMissingAnswer() throws MalformedURLException {
-        final URL url = AnswerBuilder.formKey("1FAIpQLScahJirT2sVrm0qDveeuiO1oZBJ5B7J0gdeI7UAZGohKEmi9g")
-                .put(786688631L, getProperty("user.dir", "unknown"))
+    public void submitFormExpectMissingRequiredAnswerException() throws MalformedURLException {
+        final URL url = Builder.formKey("1FAIpQLScahJirT2sVrm0qDveeuiO1oZBJ5B7J0gdeI7UAZGohKEmi9g")
+                .put(JGForm.DIRECTORY, getProperty("user.dir", "unknown"))
                 .toUrl();
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
                 SubmitterTest.this.submitter.submitForm(url);
             }
-        }).isInstanceOf(MissingRequiredAnswerException.class).hasMessage("One or more required question is not answered");
+        }).isInstanceOf(MissingRequiredAnswerException.class)
+                .hasMessage("One or more required question is not answered or specified value is incorrect");
+    }
+
+    @Test
+    public void isSuccessWithCommonStatuses() {
+        assertThat(isSuccess(200)).isTrue();
+        assertThat(isSuccess(201)).isTrue();
+        assertThat(isSuccess(204)).isTrue();
+        assertThat(isSuccess(0)).isFalse();
+        assertThat(isSuccess(400)).isFalse();
+        assertThat(isSuccess(500)).isFalse();
     }
 }

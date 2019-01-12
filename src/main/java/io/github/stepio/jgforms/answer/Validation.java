@@ -1,4 +1,4 @@
-package io.github.stepio.jgforms;
+package io.github.stepio.jgforms.answer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -12,9 +12,9 @@ import static java.lang.String.format;
  *
  * @author Igor Stepanov
  */
-public class Utils {
+public class Validation {
 
-    private Utils() {
+    private Validation() {
     }
 
     public static String encode(String text) {
@@ -36,10 +36,6 @@ public class Utils {
         return (str == null || "".equals(str));
     }
 
-    public static boolean isSuccess(int httpCode) {
-        return 2 == httpCode / 100;
-    }
-
     public static String message(String message, Object... params) {
         String result = message;
         if (hasLength(message)) {
@@ -59,7 +55,11 @@ public class Utils {
 
     public static void state(boolean flag, String comment, Object... params) {
         if (!flag) {
-            throw new IllegalArgumentException(message(comment, params));
+            fail(comment, params);
         }
+    }
+
+    public static void fail(String comment, Object... params) {
+        throw new IllegalArgumentException(message(comment, params));
     }
 }
