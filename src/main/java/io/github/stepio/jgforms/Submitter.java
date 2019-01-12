@@ -23,6 +23,13 @@ public class Submitter {
         this.configuration = configuration;
     }
 
+    /**
+     * Submits specified data to the Google Form.
+     * @param formAnswersUrl the URL of the Google's Form with pre-filled data
+     * @throws InvalidFormException if form's URL is invalid, most probably because of the wrong key
+     * @throws MissingRequiredAnswerException if at least one of the required parameters is missing or incorrect value is specified
+     * @throws NotSubmittedException if unexpected error occurred
+     */
     public void submitForm(URL formAnswersUrl) {
         HttpURLConnection connection = null;
         int statusCode;
@@ -58,7 +65,7 @@ public class Submitter {
         }
     }
 
-    public static boolean isSuccess(int httpCode) {
+    protected static boolean isSuccess(int httpCode) {
         return 2 == httpCode / 100;
     }
 }

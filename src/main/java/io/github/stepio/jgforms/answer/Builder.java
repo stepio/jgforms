@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -13,6 +14,7 @@ import static io.github.stepio.jgforms.answer.Validation.encode;
 import static io.github.stepio.jgforms.answer.Validation.isNotEmpty;
 import static io.github.stepio.jgforms.answer.Validation.notNull;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 
 /**
  * Builds request URL for a Google Form.
@@ -37,7 +39,7 @@ public class Builder {
     private static final String TIME_UNIT_MANDATORY = "TimeUnit for answer is mandatory";
 
     private String key;
-    private Map<String, String> answers;
+    private Map<String, List<String>> answers;
 
     public Builder(String key) {
         this.key = key;
@@ -122,7 +124,7 @@ public class Builder {
     }
 
     protected Builder put(String questionKey, String value) {
-        this.answers.put(questionKey, value);
+        this.answers.put(questionKey, singletonList(value));
         return this;
     }
 
@@ -132,15 +134,17 @@ public class Builder {
         template.append(format(GOOGLE_FORM_TEMPLATE, Builder.this.key))
                 .append('?');
         boolean first = true;
-        for (Map.Entry<String, String> entry : this.answers.entrySet()) {
-            if (first) {
-                first = false;
-            } else {
-                template.append('&');
+        for (Map.Entry<String, List<String>> entry : this.answers.entrySet()) {
+            for (String value : entry.getValue()) {
+                if (first) {
+                    first = false;
+                } else {
+                    template.append('&');
+                }
+                template.append(entry.getKey())
+                        .append('=')
+                        .append(encode(value));
             }
-            template.append(entry.getKey())
-                    .append('=')
-                    .append(encode(entry.getValue()));
         }
         return template.toString();
     }
