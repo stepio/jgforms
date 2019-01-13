@@ -38,7 +38,7 @@ public class Validation {
     /**
      * Check that the given {@link CharSequence} is neither {@code null} nor of length 0.
      * @param text the {@code CharSequence} to check (may be {@code null})
-     * @return {@code true} if the {@code CharSequence} is not {@code null} and has length or {@code false} otherwise
+     * @return {@code true} if the {@code CharSequence} is not {@code null} and has length
      */
     public static boolean hasLength(CharSequence text) {
         return text != null && text.length() > 0;
@@ -47,6 +47,7 @@ public class Validation {
     /**
      * Check whether the given {@code String} is empty or null.
      * @param text the candidate String
+     * @return {@code true} if the {@code CharSequence} is {@code null} or equals to empty {@code String} literal
      */
     public static boolean isEmpty(Object text) {
         return (text == null || "".equals(text));
