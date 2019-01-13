@@ -41,11 +41,17 @@ public class Builder {
     private String key;
     private Map<String, List<String>> answers;
 
-    public Builder(String key) {
+    private Builder(String key) {
         this.key = key;
         this.answers = new HashMap<>();
     }
 
+    /**
+     * Submit answer for the question of type "Date" with options "Include year" and "Include time" enabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param value the answer for the question about specific date
+     * @return current builder for populating form's data
+     */
     public Builder putDateTime(MetaData metaData, Calendar value) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(value, ANSWER_MANDATORY);
@@ -54,6 +60,12 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Submit answer for the question of type "Date" with option "Include time" disabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param value the answer for the question about specific date
+     * @return current builder for populating form's data
+     */
     public Builder putDate(MetaData metaData, Calendar value) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(value, ANSWER_MANDATORY);
@@ -62,6 +74,13 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Submit answer for the question of type "Date" with option "Include year" disabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param months number of months to answer the question about specific date
+     * @param days number of days to answer the question about specific date
+     * @return current builder for populating form's data
+     */
     public Builder putDate(MetaData metaData, int months, int days) {
         notNull(metaData, META_DATA_MANDATORY);
         String questionKey = toQuestionParam(metaData);
@@ -70,6 +89,13 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Submit answer for the question of type "Time" with option "Duration" enabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param start date representing initial point of the interval
+     * @param finish date representing final point of the interval
+     * @return current builder for populating form's data
+     */
     public Builder putDuration(MetaData metaData, Calendar start, Calendar finish) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(start, ANSWERS_ALL_MANDATORY);
@@ -77,6 +103,13 @@ public class Builder {
         return putDuration(metaData, finish.getTimeInMillis() - start.getTimeInMillis(), TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Submit answer for the question of type "Time" with option "Duration" enabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param duration length of the time interval to submit
+     * @param timeUnit units, representing current timed interval
+     * @return current builder for populating form's data
+     */
     public Builder putDuration(MetaData metaData, long duration, TimeUnit timeUnit) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(timeUnit, TIME_UNIT_MANDATORY);
@@ -89,6 +122,14 @@ public class Builder {
         return putDuration(metaData, hours, minutes, seconds);
     }
 
+    /**
+     * Submit answer for the question of type "Time" with option "Duration" enabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param hours number of hours to answer the question about specific time duration
+     * @param minutes number of minutes to answer the question about specific time duration
+     * @param seconds number of seconds to answer the question about specific time duration
+     * @return current builder for populating form's data
+     */
     public Builder putDuration(MetaData metaData, int hours, int minutes, int seconds) {
         notNull(metaData, META_DATA_MANDATORY);
         String questionKey = toQuestionParam(metaData);
@@ -98,6 +139,12 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Submit answer for the question of type "Time" with option "Time" enabled.
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param value the answer for the question about specific time
+     * @return current builder for populating form's data
+     */
     public Builder putTime(MetaData metaData, Calendar value) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(value, ANSWER_MANDATORY);
@@ -107,12 +154,24 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Submit answer for the question of types "Short answer" or "Paragraph".
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param value the answer for the question, to be converted into {@code String}
+     * @return current builder for populating form's data
+     */
     public Builder put(MetaData metaData, Number value) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(value, ANSWER_MANDATORY);
         return put(toQuestionParam(metaData), value);
     }
 
+    /**
+     * Submit answer for the question of types "Short answer" or "Paragraph".
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param value the answer for the question
+     * @return current builder for populating form's data
+     */
     public Builder put(MetaData metaData, String value) {
         notNull(metaData, META_DATA_MANDATORY);
         notNull(value, ANSWER_MANDATORY);
@@ -128,6 +187,10 @@ public class Builder {
         return this;
     }
 
+    /**
+     * Build {@code String} representation for the URL to the Google Form using previously populated data.
+     * @return constructed textual URL form
+     */
     public String toUrlString() {
         isNotEmpty(this.answers, ANSWER_REQUIRED);
         StringBuilder template = new StringBuilder();
@@ -149,6 +212,12 @@ public class Builder {
         return template.toString();
     }
 
+    /**
+     * Build {@code URL} to the Google Form using previously populated data.
+     * @return constructed URL
+     * @throws MalformedURLException
+     *          If incorrect data specified as form's key or specific parameters
+     */
     public URL toUrl() throws MalformedURLException {
         return new URL(toUrlString());
     }
@@ -157,6 +226,11 @@ public class Builder {
         return format(QUESTION_PARAM_FORMAT, questionKey.getId());
     }
 
+    /**
+     * Prepare Builder instance for the given identifier of a Google Form to populate data and prepare it for submission.
+     * @param key identifier of the specific Google Form to fill
+     * @return current builder for populating form's data
+     */
     public static Builder formKey(String key) {
         return new Builder(key);
     }

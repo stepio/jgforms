@@ -17,6 +17,13 @@ public class Validation {
     private Validation() {
     }
 
+    /**
+     * Translate a string into {@code application/x-www-form-urlencoded} using UTF-8 encoding.
+     * @param text {@code String} to be translated
+     * @return the translated {@code String}.
+     * @throws IllegalStateException if UTF-8 encoding is not supported
+     * @see URLEncoder#encode(java.lang.String, java.lang.String)
+     */
     public static String encode(String text) {
         try {
             if (isEmpty(text)) {
@@ -28,14 +35,30 @@ public class Validation {
         }
     }
 
+    /**
+     * Check that the given {@code CharSequence} is neither null nor of length 0.
+     * @param text the CharSequence to check (may be null)
+     * @return true if the CharSequence is not null and has length or false otherwise
+     */
     public static boolean hasLength(CharSequence text) {
         return text != null && text.length() > 0;
     }
 
-    public static boolean isEmpty(Object str) {
-        return (str == null || "".equals(str));
+    /**
+     * Check whether the given {@code String} is empty or null.
+     * @param text the candidate String
+     */
+    public static boolean isEmpty(Object text) {
+        return (text == null || "".equals(text));
     }
 
+    /**
+     * Returns a composed message using specified text with placeholders and params to fill those placeholders.
+     * @param message {@code String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @return composed message with parameters
+     * @see String#format(String, Object...)
+     */
     public static String message(String message, Object... params) {
         String result = message;
         if (hasLength(message)) {
@@ -44,22 +67,49 @@ public class Validation {
         return result;
     }
 
-    public static void isNotEmpty(Map map, String comment, Object... params) {
-        notNull(map, comment, params);
-        state(!map.isEmpty(), comment, params);
+    /**
+     * Assert that {@code Map} is not empty.
+     * @param map the map to check
+     * @param message {@code String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @throws IllegalArgumentException if specified map is empty, using the composed message with parameters
+     */
+    public static void isNotEmpty(Map map, String message, Object... params) {
+        notNull(map, message, params);
+        isTrue(!map.isEmpty(), message, params);
     }
 
-    public static void notNull(Object value, String comment, Object... params) {
-        state(value != null, comment, params);
+    /**
+     * Assert that an object is not null.
+     * @param value the object to check
+     * @param message {@code String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @throws IllegalArgumentException if specified object is null, using the composed message with parameters
+     */
+    public static void notNull(Object value, String message, Object... params) {
+        isTrue(value != null, message, params);
     }
 
-    public static void state(boolean flag, String comment, Object... params) {
+    /**
+     * Assert a boolean expression, throwing an {@code IllegalArgumentException} if the expression evaluates to false.
+     * @param flag the expression to check
+     * @param message {@code String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @throws IllegalArgumentException if specified expression is false, using the composed message with parameters
+     */
+    public static void isTrue(boolean flag, String message, Object... params) {
         if (!flag) {
-            fail(comment, params);
+            fail(message, params);
         }
     }
 
-    public static void fail(String comment, Object... params) {
-        throw new IllegalArgumentException(message(comment, params));
+    /**
+     * Raise {@code IllegalArgumentException} using specified message and parameters.
+     * @param message {@code String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @throws IllegalArgumentException using the composed message with parameters
+     */
+    public static void fail(String message, Object... params) {
+        throw new IllegalArgumentException(message(message, params));
     }
 }
