@@ -1,10 +1,12 @@
 package io.github.stepio.jgforms;
 
+import io.github.stepio.jgforms.exception.InvalidFormException;
+import io.github.stepio.jgforms.exception.MissingRequiredAnswerException;
+import io.github.stepio.jgforms.exception.NotSubmittedException;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static io.github.stepio.jgforms.Utils.isSuccess;
 
 /**
  * Submits Google Form data using Java native {@code HttpURLConnection}.
@@ -21,6 +23,13 @@ public class Submitter {
         this.configuration = configuration;
     }
 
+    /**
+     * Submit specified data to the Google Form.
+     * @param formAnswersUrl the URL of the Google's Form with pre-filled data
+     * @throws InvalidFormException if form's URL is invalid, most probably because of the wrong key
+     * @throws MissingRequiredAnswerException if at least one of the required parameters is missing or incorrect value is specified
+     * @throws NotSubmittedException if unexpected error occurred
+     */
     public void submitForm(URL formAnswersUrl) {
         HttpURLConnection connection = null;
         int statusCode;
@@ -37,7 +46,7 @@ public class Submitter {
         if (!isSuccess(statusCode)) {
             switch (statusCode) {
                 case 400:
-                    throw new MissingRequiredAnswerException("One or more required question is not answered");
+                    throw new MissingRequiredAnswerException("One or more required question is not answered or specified value is incorrect");
                 case 404:
                     throw new InvalidFormException("Form's URL is invalid, probably invalid key");
                 default:
@@ -54,5 +63,9 @@ public class Submitter {
                 LOG.error("Failed to disconnect", ex);
             }
         }
+    }
+
+    protected static boolean isSuccess(int httpCode) {
+        return 2 == httpCode / 100;
     }
 }

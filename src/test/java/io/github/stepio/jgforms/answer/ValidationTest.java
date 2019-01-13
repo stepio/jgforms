@@ -1,4 +1,4 @@
-package io.github.stepio.jgforms;
+package io.github.stepio.jgforms.answer;
 
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
@@ -7,18 +7,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.MissingFormatArgumentException;
 
-import static io.github.stepio.jgforms.Utils.encode;
-import static io.github.stepio.jgforms.Utils.hasLength;
-import static io.github.stepio.jgforms.Utils.isEmpty;
-import static io.github.stepio.jgforms.Utils.isNotEmpty;
-import static io.github.stepio.jgforms.Utils.isSuccess;
-import static io.github.stepio.jgforms.Utils.message;
-import static io.github.stepio.jgforms.Utils.notNull;
-import static io.github.stepio.jgforms.Utils.state;
+import static io.github.stepio.jgforms.answer.Validation.encode;
+import static io.github.stepio.jgforms.answer.Validation.hasLength;
+import static io.github.stepio.jgforms.answer.Validation.isEmpty;
+import static io.github.stepio.jgforms.answer.Validation.isNotEmpty;
+import static io.github.stepio.jgforms.answer.Validation.isTrue;
+import static io.github.stepio.jgforms.answer.Validation.message;
+import static io.github.stepio.jgforms.answer.Validation.notNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class UtilsTest {
+public class ValidationTest {
 
     @Test
     public void encodeWithString() {
@@ -45,16 +44,6 @@ public class UtilsTest {
         assertThat(isEmpty(" ")).isFalse();
         assertThat(isEmpty("qwerty")).isFalse();
         assertThat(isEmpty("123")).isFalse();
-    }
-
-    @Test
-    public void isSuccessWithCommonStatuses() {
-        assertThat(isSuccess(200)).isTrue();
-        assertThat(isSuccess(201)).isTrue();
-        assertThat(isSuccess(204)).isTrue();
-        assertThat(isSuccess(0)).isFalse();
-        assertThat(isSuccess(400)).isFalse();
-        assertThat(isSuccess(500)).isFalse();
     }
 
     @Test
@@ -112,12 +101,12 @@ public class UtilsTest {
     }
 
     @Test
-    public void stateWithParams() {
-        state(true, "Valid value");
+    public void isTrueWithParams() {
+        isTrue(true, "Valid value");
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                state(false, "Value is false");
+                isTrue(false, "Value is false");
             }
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is false");
     }
