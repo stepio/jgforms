@@ -4,9 +4,11 @@
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=stepio_jgforms&metric=alert_status)](https://sonarcloud.io/dashboard?id=stepio_jgforms)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6886f76bbc2347a19fe5dda0978038a9)](https://app.codacy.com/app/stepio/jgforms?utm_source=github.com&utm_medium=referral&utm_content=stepio/jgforms&utm_campaign=Badge_Grade_Dashboard)
 [![DepShield Badge](https://depshield.sonatype.org/badges/stepio/jgforms/depshield.svg)](https://depshield.github.io)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.stepio.jgforms/jgforms.svg)](https://mvnrepository.com/artifact/io.github.stepio.jgforms/jgforms)
+[![Javadocs](http://www.javadoc.io/badge/io.github.stepio.jgforms/jgforms.svg)](http://www.javadoc.io/doc/io.github.stepio.jgforms/jgforms)
 [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-Google's form submission using Java API. No third-party dependencies (except of test-scoped), compatible with Java 7 and Android.
+Support submitting Google Forms through Java API. No third-party dependencies (except of test-scoped), compatible with Java 7 and Android.
 
 Suppose you have a Google Form with next URL:
 ```properties
@@ -30,8 +32,16 @@ entry.1536399354_second: 14
 The above given numbers in each of the `entry.<number>: value` lines identify the appropriate questions in your Google Form.
 So while using the project you will need them along with the above mentioned form key.
 
-To submit data to your form using this project, just follow next steps:
-1.  Prepare metadata to match your Google Form:
+To submit data to your form using this module, just follow next steps:
+1.  Add dependency to the [latest version](https://search.maven.org/search?q=g:io.github.stepio.jgforms%20AND%20a:jgforms&core=gav):
+```xml
+<dependency>
+    <groupId>io.github.stepio.jgforms</groupId>
+    <artifactId>jgforms</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+2.  Describe metadata, matching your Google Form:
 ```java
 public enum MyForm implements MetaData {
 
@@ -52,7 +62,7 @@ public enum MyForm implements MetaData {
     }
 }
 ```
-2.  Use metadata to prepare form data and construct `URL` object with it:
+3.  Use metadata to prepare form data and construct `URL` object with it:
 ```java
 Calendar date = Calendar.getInstance();
 Calendar from = Calendar.getInstance();
@@ -68,7 +78,7 @@ The above given code generates next URL:
 ```properties
 https://docs.google.com/forms/d/e/1FAIpQLScahJirT2sVrm0qDveeuiO1oZBJ5B7J0gdeI7UAZGohKEmi9g/formResponse?entry.1117050788_month=1&entry.1117050788_day=13&entry.1117050788_year=2019&entry.1536399354_minute=16&entry.1536399354_second=43&entry.1117050788_hour=14&entry.1117050788_minute=18&entry.786688631=Any+long+text+could+be+here&entry.1536399354_hour=13&entry.1464627081=42
 ```
-3.  Submit the form data:
+4.  Submit the form data:
 ```java
 Submitter submitter = new Submitter(
     new Configuration()
