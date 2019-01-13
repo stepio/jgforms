@@ -28,7 +28,7 @@ public class Submitter {
      * @param formAnswersUrl the URL of the Google's Form with pre-filled data
      * @throws InvalidFormException if form's URL is invalid, most probably because of the wrong key
      * @throws MissingRequiredAnswerException if at least one of the required parameters is missing or incorrect value is specified
-     * @throws NotSubmittedException if unexpected error occurred
+     * @throws NotSubmittedException if unexpected problem occurred (unexpected response code or {@link RuntimeException})
      */
     public void submitForm(URL formAnswersUrl) {
         HttpURLConnection connection = null;
