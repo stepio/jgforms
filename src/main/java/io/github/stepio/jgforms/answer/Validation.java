@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 - 2019 Igor Stepanov. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.stepio.jgforms.answer;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +35,7 @@ public class Validation {
 
     /**
      * Translate a string into {@code application/x-www-form-urlencoded} using UTF-8 encoding.
-     * @param text {@code String} to be translated
+     * @param text {@link String} to be translated
      * @return the translated {@code String}.
      * @throws IllegalStateException if UTF-8 encoding is not supported
      * @see URLEncoder#encode(java.lang.String, java.lang.String)
@@ -36,9 +52,9 @@ public class Validation {
     }
 
     /**
-     * Check that the given {@code CharSequence} is neither null nor of length 0.
-     * @param text the CharSequence to check (may be null)
-     * @return true if the CharSequence is not null and has length or false otherwise
+     * Check that the given {@link CharSequence} is neither {@code null} nor of length 0.
+     * @param text the {@code CharSequence} to check (may be {@code null})
+     * @return {@code true} if the {@code CharSequence} is not {@code null} and has length
      */
     public static boolean hasLength(CharSequence text) {
         return text != null && text.length() > 0;
@@ -47,6 +63,7 @@ public class Validation {
     /**
      * Check whether the given {@code String} is empty or null.
      * @param text the candidate String
+     * @return {@code true} if the {@code CharSequence} is {@code null} or equals to empty {@code String} literal
      */
     public static boolean isEmpty(Object text) {
         return (text == null || "".equals(text));
@@ -54,7 +71,7 @@ public class Validation {
 
     /**
      * Returns a composed message using specified text with placeholders and params to fill those placeholders.
-     * @param message {@code String} text with 0 or more placeholders
+     * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
      * @return composed message with parameters
      * @see String#format(String, Object...)
@@ -68,9 +85,9 @@ public class Validation {
     }
 
     /**
-     * Assert that {@code Map} is not empty.
+     * Assert that {@link Map} is not empty.
      * @param map the map to check
-     * @param message {@code String} text with 0 or more placeholders
+     * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
      * @throws IllegalArgumentException if specified map is empty, using the composed message with parameters
      */
@@ -80,22 +97,22 @@ public class Validation {
     }
 
     /**
-     * Assert that an object is not null.
+     * Assert that an object is not {@code null}.
      * @param value the object to check
-     * @param message {@code String} text with 0 or more placeholders
+     * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
-     * @throws IllegalArgumentException if specified object is null, using the composed message with parameters
+     * @throws IllegalArgumentException if specified object is {@code null}, using the composed message with parameters
      */
     public static void notNull(Object value, String message, Object... params) {
         isTrue(value != null, message, params);
     }
 
     /**
-     * Assert a boolean expression, throwing an {@code IllegalArgumentException} if the expression evaluates to false.
+     * Assert a {@code boolean} expression, throwing an {@link IllegalArgumentException} if the expression evaluates to false.
      * @param flag the expression to check
-     * @param message {@code String} text with 0 or more placeholders
+     * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
-     * @throws IllegalArgumentException if specified expression is false, using the composed message with parameters
+     * @throws IllegalArgumentException if specified expression is {@code false}, using the composed message with parameters
      */
     public static void isTrue(boolean flag, String message, Object... params) {
         if (!flag) {
@@ -104,8 +121,8 @@ public class Validation {
     }
 
     /**
-     * Raise {@code IllegalArgumentException} using specified message and parameters.
-     * @param message {@code String} text with 0 or more placeholders
+     * Raise {@link IllegalArgumentException} using specified message and parameters.
+     * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
      * @throws IllegalArgumentException using the composed message with parameters
      */

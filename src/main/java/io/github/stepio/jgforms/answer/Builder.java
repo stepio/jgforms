@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2018 - 2019 Igor Stepanov. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.stepio.jgforms.answer;
 
 import io.github.stepio.jgforms.question.MetaData;
@@ -157,7 +173,7 @@ public class Builder {
     /**
      * Submit answer for the question of types "Short answer" or "Paragraph".
      * @param metaData the question in the form, holds it's numeric identifier
-     * @param value the answer for the question, to be converted into {@code String}
+     * @param value the answer for the question, to be converted into {@link String}
      * @return current builder for populating form's data
      */
     public Builder put(MetaData metaData, Number value) {
@@ -188,8 +204,8 @@ public class Builder {
     }
 
     /**
-     * Build {@code String} representation for the URL to the Google Form using previously populated data.
-     * @return constructed textual URL form
+     * Build {@link String} representation for the {@code URL} to the Google Form using previously populated data.
+     * @return constructed textual {@code URL} form
      */
     public String toUrlString() {
         isNotEmpty(this.answers, ANSWER_REQUIRED);
@@ -213,8 +229,8 @@ public class Builder {
     }
 
     /**
-     * Build {@code URL} to the Google Form using previously populated data.
-     * @return constructed URL
+     * Build {@link URL} to the Google Form using previously populated data.
+     * @return constructed {@code URL}
      * @throws MalformedURLException
      *          If incorrect data specified as form's key or specific parameters
      */
@@ -227,7 +243,7 @@ public class Builder {
     }
 
     /**
-     * Prepare Builder instance for the given identifier of a Google Form to populate data and prepare it for submission.
+     * Prepare {@code Builder} instance for the given identifier of a Google Form to populate data and prepare it for submission.
      * @param key identifier of the specific Google Form to fill
      * @return current builder for populating form's data
      */
