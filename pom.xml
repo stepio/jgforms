@@ -6,7 +6,7 @@
 
     <groupId>io.github.stepio.jgforms</groupId>
     <artifactId>jgforms</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <inceptionYear>2018</inceptionYear>
 
     <name>JGForms</name>
