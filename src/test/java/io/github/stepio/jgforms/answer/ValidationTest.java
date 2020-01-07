@@ -19,16 +19,21 @@ package io.github.stepio.jgforms.answer;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.MissingFormatArgumentException;
 
 import static io.github.stepio.jgforms.answer.Validation.encode;
 import static io.github.stepio.jgforms.answer.Validation.hasLength;
 import static io.github.stepio.jgforms.answer.Validation.isEmpty;
-import static io.github.stepio.jgforms.answer.Validation.isNotEmpty;
 import static io.github.stepio.jgforms.answer.Validation.isTrue;
 import static io.github.stepio.jgforms.answer.Validation.message;
+import static io.github.stepio.jgforms.answer.Validation.notEmpty;
 import static io.github.stepio.jgforms.answer.Validation.notNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -72,7 +77,7 @@ public class ValidationTest {
             public void call() {
                 message("Text %s");
             }
-        }).isInstanceOf(MissingFormatArgumentException.class).hasMessage("Format specifier '%s'");
+        }).isInstanceOf(MissingFormatArgumentException.class).hasMessageStartingWith("Format specifier");
     }
 
     @Test
@@ -85,22 +90,51 @@ public class ValidationTest {
             public void call() {
                 message("Text %s %s", "value");
             }
-        }).isInstanceOf(MissingFormatArgumentException.class).hasMessage("Format specifier '%s'");
+        }).isInstanceOf(MissingFormatArgumentException.class).hasMessageStartingWith("Format specifier");
     }
 
     @Test
-    public void isNotEmptyWithParams() {
-        isNotEmpty(Collections.singletonMap("key", "value"), "Valid value");
+    public void notEmptyMapWithParams() {
+        notEmpty(Collections.singletonMap("key", "value"), "Valid value");
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                isNotEmpty(null, "Value is null");
+                notEmpty((Map) null, "Value is null");
             }
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is null");
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                isNotEmpty(new HashMap<>(), "Value is empty");
+                notEmpty(new HashMap<>(), "Value is empty");
+            }
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is empty");
+    }
+
+    @Test
+    public void notEmptyCollectionWithParams() {
+        notEmpty(Collections.singletonList("value"), "Valid value");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                notEmpty((List) null, "Value is null");
+            }
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is null");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                notEmpty(new ArrayList(), "Value is empty");
+            }
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is empty");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                notEmpty(new LinkedList(), "Value is empty");
+            }
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is empty");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                notEmpty(new HashSet(), "Value is empty");
             }
         }).isInstanceOf(IllegalArgumentException.class).hasMessage("Value is empty");
     }

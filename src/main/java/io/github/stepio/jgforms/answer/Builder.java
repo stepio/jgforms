@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static io.github.stepio.jgforms.answer.Validation.encode;
-import static io.github.stepio.jgforms.answer.Validation.isNotEmpty;
+import static io.github.stepio.jgforms.answer.Validation.notEmpty;
 import static io.github.stepio.jgforms.answer.Validation.notNull;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
@@ -194,12 +194,29 @@ public class Builder {
         return put(toQuestionParam(metaData), value);
     }
 
+    /**
+     * Submit answer for the question of types "Checklist".
+     * @param metaData the question in the form, holds it's numeric identifier
+     * @param values the answer for the question
+     * @return current builder for populating form's data
+     */
+    public Builder put(MetaData metaData, List<String> values) {
+        notNull(metaData, META_DATA_MANDATORY);
+        notEmpty(values, ANSWER_MANDATORY);
+        return put(toQuestionParam(metaData), values);
+    }
+
     protected Builder put(String questionKey, Number value) {
         return put(questionKey, String.valueOf(value));
     }
 
     protected Builder put(String questionKey, String value) {
-        this.answers.put(questionKey, singletonList(value));
+        put(questionKey, singletonList(value));
+        return this;
+    }
+
+    protected Builder put(String questionKey, List<String> values) {
+        this.answers.put(questionKey, values);
         return this;
     }
 
@@ -208,7 +225,7 @@ public class Builder {
      * @return constructed textual {@code URL} form
      */
     public String toUrlString() {
-        isNotEmpty(this.answers, ANSWER_REQUIRED);
+        notEmpty(this.answers, ANSWER_REQUIRED);
         StringBuilder template = new StringBuilder();
         template.append(format(GOOGLE_FORM_TEMPLATE, Builder.this.key))
                 .append('?');
