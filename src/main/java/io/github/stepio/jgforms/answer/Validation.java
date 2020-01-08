@@ -18,6 +18,7 @@ package io.github.stepio.jgforms.answer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -85,13 +86,25 @@ public class Validation {
     }
 
     /**
+     * Assert that {@link Collection} is not empty.
+     * @param collection the collection to check
+     * @param message {@link String} text with 0 or more placeholders
+     * @param params arguments referenced by the placeholders in the message
+     * @throws IllegalArgumentException if specified map is empty, using the composed message with parameters
+     */
+    public static void notEmpty(Collection collection, String message, Object... params) {
+        notNull(collection, message, params);
+        isTrue(!collection.isEmpty(), message, params);
+    }
+
+    /**
      * Assert that {@link Map} is not empty.
      * @param map the map to check
      * @param message {@link String} text with 0 or more placeholders
      * @param params arguments referenced by the placeholders in the message
      * @throws IllegalArgumentException if specified map is empty, using the composed message with parameters
      */
-    public static void isNotEmpty(Map map, String message, Object... params) {
+    public static void notEmpty(Map map, String message, Object... params) {
         notNull(map, message, params);
         isTrue(!map.isEmpty(), message, params);
     }
