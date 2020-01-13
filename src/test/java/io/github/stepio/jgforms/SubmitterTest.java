@@ -27,7 +27,10 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 import static io.github.stepio.jgforms.Submitter.isSuccess;
 import static java.lang.System.getProperty;
@@ -60,6 +63,7 @@ public class SubmitterTest {
                 .put(JGForm.DIRECTORY, getProperty("user.dir", "unknown"))
                 .putDateTime(JGForm.CREATION_DATE, date)
                 .putDuration(JGForm.SAMPLE_DURATION, from, date)
+                .put(JGForm.CHOICES, randomChoices())
                 .toUrl();
         this.submitter.submitForm(url);
     }
@@ -112,5 +116,20 @@ public class SubmitterTest {
         assertThat(isSuccess(0)).isFalse();
         assertThat(isSuccess(400)).isFalse();
         assertThat(isSuccess(500)).isFalse();
+    }
+
+    private List<String> randomChoices() {
+        List<String> choices = new ArrayList<String>();
+        Random random = new Random();
+        if (random.nextBoolean()) {
+            choices.add("First");
+        }
+        if (random.nextBoolean()) {
+            choices.add("Second");
+        }
+        if (random.nextBoolean()) {
+            choices.add("Third");
+        }
+        return choices;
     }
 }

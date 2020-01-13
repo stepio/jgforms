@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,9 +35,11 @@ public class BuilderTest {
         URL url = Builder.formKey("FORM_IDENTIFIER")
                 .put(JGForm.USER_NAME, 1234567)
                 .put(JGForm.DIRECTORY, "qwerty")
+                .put(JGForm.CHOICES, Collections.singletonList("Second"))
                 .toUrl();
         assertThat(url.toString())
-                .isEqualTo("https://docs.google.com/forms/d/e/FORM_IDENTIFIER/formResponse?entry.786688631=qwerty&entry.1464627081=1234567");
+                .isEqualTo("https://docs.google.com/forms/d/e/FORM_IDENTIFIER/formResponse?" +
+                        "entry.786688631=qwerty&entry.176659521=Second&entry.1464627081=1234567");
     }
 
     @Test
