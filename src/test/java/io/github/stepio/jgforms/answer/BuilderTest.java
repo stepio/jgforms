@@ -38,8 +38,8 @@ public class BuilderTest {
                 .put(JGForm.CHOICES, Collections.singletonList("Second"))
                 .toUrl();
         assertThat(url.toString())
-                .isEqualTo("https://docs.google.com/forms/d/e/FORM_IDENTIFIER/formResponse?" +
-                        "entry.786688631=qwerty&entry.176659521=Second&entry.1464627081=1234567");
+                .contains("https://docs.google.com/forms/d/e/FORM_IDENTIFIER/formResponse",
+                        "entry.786688631=qwerty", "entry.176659521=Second", "entry.1464627081=1234567");
     }
 
     @Test
