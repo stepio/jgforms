@@ -38,7 +38,7 @@ To submit data to your form using this module, just follow next steps:
 <dependency>
     <groupId>io.github.stepio.jgforms</groupId>
     <artifactId>jgforms</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 2.  Describe metadata, matching your Google Form:
