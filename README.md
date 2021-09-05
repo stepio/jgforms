@@ -52,7 +52,7 @@ public enum MyForm implements MetaData {
 
     private long id;
 
-    JGForm(long id) {
+    MyForm(long id) {
         this.id = id;
     }
 
